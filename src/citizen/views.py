@@ -25,8 +25,8 @@ def login_view(request):
     return render(request, "citizen/login.html",{'form':form})
 
 def dashboard(request):
-    if not request.user.is_authenticated() :
-        return redirect("/citizen")
+    # if not request.user.is_authenticated() :
+    #     return redirect("/citizen")
     
     total=Case.objects.filter(userid=request.user).count()
     pending=Case.objects.filter(userid=request.user,approved=False).count()
@@ -44,25 +44,22 @@ def citizen_logout(request):
     return redirect("/")
 
 def create_case(request):
-    if not request.user.is_authenticated():
-        return redirect("/citizen")
+    # if not request.user.is_authenticated():
+    #     return redirect("/citizen")
     form = case_form(request.POST or None)
     if form.is_valid():
         instance=form.save(commit=False)
         instance.save()
-        return redirect("/citizen/dashboard")
+        return redirect("/")
+        #return redirect("/citizen/dashboard")
     return render(request, "citizen/case.html", {"form": form})
 
 
 
 
-
-
-
-
 def cbcview(request,sel=None):
-    if not request.user.is_authenticated():
-        return redirect("/citizen")
+    # if not request.user.is_authenticated():
+    #     return redirect("/citizen")
     my_object = get_object_or_404(Citizen, pk=request.user.id)
     
     if int(sel)==0:
@@ -86,8 +83,8 @@ def cbcview(request,sel=None):
 from comment.models import Comment
 
 def user_case_detail(request,id=None):
-    if not request.user.is_authenticated():
-        return redirect("/citizen")
+    # if not request.user.is_authenticated():
+    #     return redirect("/citizen")
     comments = Comment.objects.filter(case = id)
     my_object = get_object_or_404(Case, id=id)
     
@@ -132,8 +129,8 @@ def user_case_detail(request,id=None):
 
 
 def create_cyber_case(request):
-    if not request.user.is_authenticated():
-        return redirect("/citizen")
+    # if not request.user.is_authenticated():
+    #     return redirect("/citizen")
     form=cyber_case_form(request.POST or None)
     if form.is_valid():
         instance=form.save(commit=False)
@@ -146,16 +143,14 @@ def register_view(request):
     form = UsersRegisterForm(request.POST or None)
     print(form)
     if form.is_valid():
-        print('form validated successfully')
-        user = form.save()
-        username = form.cleaned_data.get("username")
-        password = form.cleaned_data.get("password")
-        user.set_password(password)
-        user.save()
-        new_user = authenticate(username=username, password=password)
-        login(request, new_user)
-        return redirect("/citizen/dashboard")
+        # print('form validated successfully')
+        # user = form.save()
+        # username = form.cleaned_data.get("username")
+        # password = form.cleaned_data.get("password")
+        # user.set_password(password)
+        # user.save()
+        # new_user = authenticate(username=username, password=password)
+        # login(request, new_user, backend='raj_hack.auth_backend.CustomUserModelBackend')
+        # return redirect("/citizen/dashboard")
+        return redirect("/")
     return render(request, "citizen/register.html",{"form" : form,})
-
-
-
